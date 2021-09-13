@@ -115,7 +115,7 @@ namespace SaveFileInjectorRemake
 
                 if (SpecifiedbhvrSession.Length > 255)
                 {
-                    Console.Write("\n\nSpecify what you wanna do:\n[1] Inject SaveFile\n[2] Reset SaveFile - Zero Progress\n> ");
+                    Console.Write("\nSpecify what you wanna do:\n[1] Inject SaveFile\n[2] Reset SaveFile - Zero Progress\n[3] Dump SaveFile\n> ");
                     switch (Console.ReadLine())
                     {
                         case "1":
@@ -124,6 +124,10 @@ namespace SaveFileInjectorRemake
 
                         case "2":
                             SpecifiedWorkingMode = 1;
+                            break;
+
+                        case "3":
+                            SpecifiedWorkingMode = 2;
                             break;
 
                         default:
@@ -136,6 +140,7 @@ namespace SaveFileInjectorRemake
                 else
                 {
                     Console.WriteLine("\n\nERROR: bhvrSession Length can't be less then 256 symbols!\nPress ENTER to continue...");
+                    SpecifiedGamePlatform = string.Empty;
                     SpecifiedbhvrSession = string.Empty;
                     Console.ReadLine();
                     Main();
@@ -147,6 +152,9 @@ namespace SaveFileInjectorRemake
                     SpecifiedSaveFile = InitializeSaveFile(string.Empty);
                 else if (SpecifiedWorkingMode == 1)
                     SpecifiedSaveFile = Properties.Resources.OFFLINE_SAVEFILE;
+                else if (SpecifiedWorkingMode == 2)
+                    SpecifiedSaveFile = "NONE";
+
 
                 if (SpecifiedSaveFile.Length != 0)
                 {
@@ -163,6 +171,15 @@ namespace SaveFileInjectorRemake
 
                     Console.WriteLine($"Profile Version: {saveFileVersion}\n\nTrying To Obtain playerUID...");
                     string saveFileUserID = NetServices.REQUEST_GET($"https://{SpecifiedGamePlatform}.live.bhvrdbd.com/api/v1/players/me/states/FullProfile/binary", $"bhvrSession={SpecifiedbhvrSession}");
+                    if (SpecifiedWorkingMode == 2)
+                    {
+                        InitializeSaveFileDump(SaveFile.DecryptSavefile(saveFileUserID));
+                        SpecifiedbhvrSession = string.Empty;
+                        SpecifiedSaveFile = string.Empty;
+                        Console.WriteLine("SaveFile was successfully obtained & stored on PC \nPress ENTER to continue...");
+                        Console.ReadLine();
+                        Main();
+                    }
                     InitializeSaveFileBackup(saveFileUserID);
                     if (saveFileUserID.Length == 0)
                     {
@@ -185,7 +202,7 @@ namespace SaveFileInjectorRemake
                         Console.ReadLine();
                         Main();
                     }
-                    Console.WriteLine("Success!\n\nPress ENTER to continue...");
+                    Console.Write("Success!\n\nPress ENTER to continue...");
                     Console.ReadLine();
                     SpecifiedbhvrSession = string.Empty;
                     SpecifiedGamePlatform = string.Empty;
@@ -235,10 +252,19 @@ namespace SaveFileInjectorRemake
         {
             try
             {
-                if (File.Exists(ProgramCurrentDirectory + "\\fullProfile.backup.txt"))
-                    File.Delete(ProgramCurrentDirectory + "\\fullProfile.backup.txt");
-
-                File.WriteAllText(ProgramCurrentDirectory + "\\fullProfile.backup.txt", InitializeSaveFile(input));
+                if (!Directory.Exists($"{ProgramCurrentDirectory}\\Backups"))
+                    Directory.CreateDirectory($"{ProgramCurrentDirectory}\\Backups");
+                File.WriteAllText($"{ProgramCurrentDirectory}\\Backups\\[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString().Replace(":", "։")}] fullProfile.backup.txt", input);
+            }
+            catch { }
+        }
+        private static void InitializeSaveFileDump(string input)
+        {
+            try
+            {
+                if (!Directory.Exists($"{ProgramCurrentDirectory}\\Dumped SaveFiles"))
+                    Directory.CreateDirectory($"{ProgramCurrentDirectory}\\Dumped SaveFiles");
+                File.WriteAllText($"{ProgramCurrentDirectory}\\Dumped SaveFiles\\[{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString().Replace(":", "։")}] fullProfile.dump.txt", input);
             }
             catch { }
         }
