@@ -1,6 +1,7 @@
 ﻿using CranchyLib.SaveFile;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -106,6 +107,20 @@ namespace SaveFileInjectorRemake
                 }
             }
 
+            Console.WriteLine("\nTrying to obtain game version from \"VersionNumber.txt\" file...");
+            if(!File.Exists(ProgramCurrentDirectory + "\\VersionNumber.txt"))
+            {
+                Console.Write("ERROR: VersionNumber File is Missing, please, write down the game version (example: \"5.0.0\")\n> ");
+                NetServices.GameVersion = Console.ReadLine();
+                File.WriteAllText(ProgramCurrentDirectory + "\\VersionNumber.txt", NetServices.GameVersion);
+                Main();
+            } else
+            {
+                NetServices.GameVersion = File.ReadAllText(ProgramCurrentDirectory + "\\VersionNumber.txt").Replace(" ", string.Empty).Replace("PTB", string.Empty).Replace("\"", string.Empty);
+                Console.WriteLine("VersionNumber: " + NetServices.GameVersion);
+            }
+
+
 
             if (SpecifiedbhvrSession.Length == 0)
             {
@@ -115,7 +130,7 @@ namespace SaveFileInjectorRemake
 
                 if (SpecifiedbhvrSession.Length > 255)
                 {
-                    Console.Write("\nSpecify what you wanna do:\n[1] Inject SaveFile\n[2] Reset SaveFile - Zero Progress\n[3] Dump SaveFile\n> ");
+                    Console.Write("\nSpecify what you wanna do:\n[1] Inject SaveFile\n[2] Reset SaveFile - Zero Progress\n[3] Dump SaveFile\n[4] Discord Server\n> ");
                     switch (Console.ReadLine())
                     {
                         case "1":
@@ -128,6 +143,14 @@ namespace SaveFileInjectorRemake
 
                         case "3":
                             SpecifiedWorkingMode = 2;
+                            break;
+
+                        case "4":
+                            Console.WriteLine("\nhttps://cranchpalace.info/discord.php \nPress ENTER to continue...");
+                            Console.ReadLine();
+                            SpecifiedGamePlatform = string.Empty;
+                            SpecifiedbhvrSession = string.Empty;
+                            Main();
                             break;
 
                         default:

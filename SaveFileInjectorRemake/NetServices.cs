@@ -5,6 +5,7 @@ namespace SaveFileInjectorRemake
 {
     public static class NetServices
     {
+        public static string GameVersion;
         public static string REQUEST_GET(string URL, string cookies)
         {
             try
@@ -14,9 +15,9 @@ namespace SaveFileInjectorRemake
                 request.ServicePoint.Expect100Continue = false;
                 request.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-464461 Windows/10.0.22000.1.768.64bit";
                 request.Headers.Add("Cookie", cookies);
-                request.Headers.Add("x-kraken-client-version", "5.2.0");
-                request.Headers.Add("x-kraken-client-provider", "steam");
-                request.Headers.Add("x-kraken-client-platform", "steam");
+                request.Headers.Add("x-kraken-client-version", GameVersion);
+                request.Headers.Add("x-kraken-client-provider", Program.SpecifiedGamePlatform);
+                request.Headers.Add("x-kraken-client-platform", Program.SpecifiedGamePlatform);
                 request.Headers.Add("x-kraken-client-os", "10.0.22000.1.768.64bit");
                 request.ContentType = "application/json";
 
@@ -39,9 +40,9 @@ namespace SaveFileInjectorRemake
                 request.ServicePoint.Expect100Continue = false;
                 request.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-464461 Windows/10.0.22000.1.768.64bit";
                 request.Headers.Add("Cookie", cookies);
-                request.Headers.Add("x-kraken-client-version", "5.2.0");
-                request.Headers.Add("x-kraken-client-provider", "steam");
-                request.Headers.Add("x-kraken-client-platform", "steam");
+                request.Headers.Add("x-kraken-client-version", GameVersion);
+                request.Headers.Add("x-kraken-client-provider", Program.SpecifiedGamePlatform);
+                request.Headers.Add("x-kraken-client-platform", Program.SpecifiedGamePlatform);
                 request.Headers.Add("x-kraken-client-os", "10.0.22000.1.768.64bit");
                 request.ContentType = "application/json";
 
@@ -65,9 +66,9 @@ namespace SaveFileInjectorRemake
                 request.ServicePoint.Expect100Continue = false;
                 request.UserAgent = "DeadByDaylight/++DeadByDaylight+Live-CL-464461 Windows/10.0.22000.1.768.64bit";
                 request.Headers.Add("Cookie", cookies);
-                request.Headers.Add("x-kraken-client-version", "5.2.0");
-                request.Headers.Add("x-kraken-client-provider", "steam");
-                request.Headers.Add("x-kraken-client-platform", "steam");
+                request.Headers.Add("x-kraken-client-version", GameVersion);
+                request.Headers.Add("x-kraken-client-provider", Program.SpecifiedGamePlatform);
+                request.Headers.Add("x-kraken-client-platform", Program.SpecifiedGamePlatform);
                 request.Headers.Add("x-kraken-client-os", "10.0.22000.1.768.64bit");
                 request.ContentType = "application/octet-stream";
                 request.Method = "POST";
