@@ -1,7 +1,6 @@
 ﻿using CranchyLib.SaveFile;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -88,7 +87,7 @@ namespace SaveFileInjectorRemake
 
             if (SpecifiedGamePlatform.Length == 0)
             {
-                Console.Write("\n\nSelect Your Platform:\n[1] Steam\n[2] Microsoft Store\n> ");
+                Console.Write("\n\nSelect Your Platform:\n[1] Steam\n[2] Microsoft Store\n[3] Epic Games\n> ");
                 switch (Console.ReadLine())
                 {
                     case "1":
@@ -97,6 +96,10 @@ namespace SaveFileInjectorRemake
 
                     case "2":
                         SpecifiedGamePlatform = "grdk";
+                        break;
+
+                    case "3":
+                        SpecifiedGamePlatform = "brill";
                         break;
 
                     default:
@@ -108,13 +111,14 @@ namespace SaveFileInjectorRemake
             }
 
             Console.WriteLine("\nTrying to obtain game version from \"VersionNumber.txt\" file...");
-            if(!File.Exists(ProgramCurrentDirectory + "\\VersionNumber.txt"))
+            if (!File.Exists(ProgramCurrentDirectory + "\\VersionNumber.txt"))
             {
                 Console.Write("ERROR: VersionNumber File is Missing, please, write down the game version (example: \"5.0.0\")\n> ");
                 NetServices.GameVersion = Console.ReadLine();
                 File.WriteAllText(ProgramCurrentDirectory + "\\VersionNumber.txt", NetServices.GameVersion);
                 Main();
-            } else
+            }
+            else
             {
                 NetServices.GameVersion = File.ReadAllText(ProgramCurrentDirectory + "\\VersionNumber.txt").Replace(" ", string.Empty).Replace("PTB", string.Empty).Replace("\"", string.Empty);
                 Console.WriteLine("VersionNumber: " + NetServices.GameVersion);
